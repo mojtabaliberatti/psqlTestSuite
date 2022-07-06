@@ -21,12 +21,29 @@ void do_select(const char *paramValues[1])
 	PGresult *res = PQexecParams(conn, stm, 1, NULL, paramValues, NULL, NULL, 0);
 
 	if (PQresultStatus(res) != PGRES_TUPLES_OK) {
-		printf("No data retrieved\n");
+		printf("No data retrieved 1\n");
 		PQclear(res);
-		do_exit(conn);
+		return ; 
 	}
 
-	printf("%s %s %s\n", PQgetvalue(res, 0, 0), PQgetvalue(res, 0, 1), PQgetvalue(res, 0, 2));
+	printf("do_select 1 %s %s %s\n", PQgetvalue(res, 0, 0), PQgetvalue(res, 0, 1), PQgetvalue(res, 0, 2));
+
+	PQclear(res);
+
+}
+
+void do_select_all(void)
+{
+    const char *stm = "SELECT * FROM emp";
+	PGresult *res = PQexecParams(conn, stm, 0, NULL, NULL, NULL, NULL, 0);
+
+	if (PQresultStatus(res) != PGRES_TUPLES_OK) {
+		printf("No data retrieved all \n");
+		PQclear(res);
+		return ;
+	}
+
+	printf(" do_select_all %s %s %s\n", PQgetvalue(res, 0, 0), PQgetvalue(res, 0, 1), PQgetvalue(res, 0, 2));
 
 	PQclear(res);
 
@@ -50,8 +67,12 @@ int main(void)
 
 	snprintf(str, LEN, "%d", 1);
 	paramValues[0] = str;    
-    do_select(paramValues);
 
+    do_select(paramValues);
+	// for(int i=0; i<1;  i++)
+	// 	do_select_all();
+
+	
 	PQfinish(conn);
 
 	return 0;
